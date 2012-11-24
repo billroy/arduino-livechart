@@ -59,8 +59,9 @@ var svg = d3.select('body').append('svg')
 	.append('g')
 		.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-d3.json('json/datalog', function(error, data) {
-//d3.json('random', function(error, data) {
+var json_uri = 'json/datalog';
+
+d3.json(json_uri, function(error, data) {
 
 	if (error) console.log('Error fetching data:', error);
 
@@ -115,6 +116,19 @@ d3.json('json/datalog', function(error, data) {
 			.text(function(d) { return d.name; });
 
 });
+
+window.setInterval(function() {
+	d3.json(json_uri, function(error, data) {
+		console.log('Update:', error, typeof data, data);
+		if (error) console.log('Error:', error);
+		else {
+			value = svg.selectAll('path')
+				.data(data)
+				.attr('d', function(d) { return line(d.values); });
+		}
+	});
+}, 5000);
+
 </script>
 
 <p>This example program charts data logged to the PC by a USB-connected Arduino sending streaming JSON.</p>
