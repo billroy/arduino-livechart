@@ -1,10 +1,13 @@
-# Arduino - Serial - Live Chart
+# Arduino - Live Chart
 
-This data server charts data logged from a USB-connected Arduino.
+This data server charts data logged from a USB-connected Arduino, or data POSTed from an Ethernet- or Wi-Fi- capable Arduino over the network.
 
-![](https://raw.github.com/billroy/arduino-serial-livechart/master/sample-chart.png)
+![](https://raw.github.com/billroy/arduino-livechart/master/sample-chart.png)
 
-The Arduino sends data in JSON.  You can use any Arduino-side program to send the data; one convenient way is to use Bitlash; see below.  You can find out more about Bitlash at http://bitlash.net
+The Arduino sends data in JSON.  For a USB-connected Arduino, you can use any Arduino-side program to send the data; one convenient way is to use Bitlash; see below.  You can find out more about Bitlash at http://bitlash.net
+
+For a network-connected Arduino you'll need to write a client to make a simple POST request via your network adapter; see way below for details.
+
 
 ## Pre-install Requirements
 
@@ -14,12 +17,12 @@ You need to install node.js (http://nodejs.org) and git (http://git-scm.com).
 
 This package uses the node-serial module, which requires you have some tools on your system to compile a driver.  See this link for more: https://github.com/voodootikigod/node-serialport
 
-### Get the arduino-serial-livechart code
+### Get the arduino-livechart code
 
 Open a terminal window and enter the commands below to install the web chart server:
 
-	$ git clone https://github.com/billroy/arduino-serial-livechart
-	$ cd arduino-serial-livechart
+	$ git clone https://github.com/billroy/arduino-livechart
+	$ cd arduino-livechart
 	$ npm install
 	$ node index.js 
 
@@ -78,3 +81,10 @@ The data format is JSON, which unfortunately contains lots of quote characters w
 	{time:20032,a0:334,count:453,switch:0}
 
 The "time" field is required.  Anything else you provide is plotted against time.
+
+### Integrating additional Arduinos
+
+You can also POST data to the PC running the live chart from any net-capable Arduino, such as an Arduino with an Ethernet or Wi-Fi sheild.
+
+The POST url is http://<server-ip>/json.  The POST body should contain the JSON data to be logged, like the example above.
+

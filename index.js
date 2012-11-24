@@ -71,9 +71,7 @@ if (port) {
 
 			if ((topchunk.length > 0) && (topchunk.charAt(0) != '{')) return;
 			var record = JSON.parse(topchunk);
-			//console.log('[', topchunk, ']', record);
 			payload.push(record);			
-			//console.log('Payload:', payload);
 		}
 	});
 
@@ -93,6 +91,7 @@ var app = express();
 
 app.configure(function () {
 	app.use(express.logger());
+	app.use(express.bodyParser());
 });
 
 app.get('/', function(req, res) { res.sendfile('index.html'); });
@@ -101,6 +100,10 @@ app.get('/json/:id', function(req, res) {
 	res.send(JSON.stringify(payload));
 });
 
-function randInt(x) { return Math.floor(Math.random() * x); }
+app.post('/json', function(req, res) {
+	//console.log('Post:', typeof req.body, req.body);
+	payload.push(req.body);
+	res.send('OK\n');
+});
 
 app.listen(argv.port || 3000);
