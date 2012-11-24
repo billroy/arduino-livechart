@@ -86,5 +86,9 @@ The "time" field is required.  Anything else you provide is plotted against time
 
 You can also POST data to the PC running the live chart from any net-capable Arduino, such as an Arduino with an Ethernet or Wi-Fi sheild.
 
-The POST url is http://<server-ip>/json.  The POST body should contain the JSON data to be logged, like the example above.
+The POST url is http://<server-ip>/json.  The POST Content-Type header should be set to 'application/json'.  The POST body should contain the JSON data to be logged, like the example above.
+
+This curl command sends a test POST:
+
+	curl -X POST -H 'Content-Type:application/json' -d '{"time":200,"a0":22,"a1":23}' localhost:3000/json
 

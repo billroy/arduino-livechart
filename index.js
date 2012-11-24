@@ -32,7 +32,7 @@ else if (process.platform === 'linux') portlist = shell.ls("/dev/ttyUSB*");
 
 if (portlist.length == 0) {
 	process.stdout.write('No ports found.\n');
-	process.exit(-1);
+	//process.exit(-1);
 }
 else if (portlist.length == 1) {
 	portname = portlist[0];
@@ -49,8 +49,8 @@ try {
 		buffersize: 20480
 	});
 } catch(e) {
-	process.stdout.write('Cannot open serial device.');
-	process.exit(-2);
+	process.stdout.write('Cannot open serial device.\n');
+	//process.exit(-2);
 }
 
 var datatext = '';
@@ -83,6 +83,7 @@ if (port) {
 		else if (port) port.write(data);
 	});
 }
+else process.stdout.write('Proceeding without serial port.\n');
 
 
 var util = require('util');
@@ -106,4 +107,6 @@ app.post('/json', function(req, res) {
 	res.send('OK\n');
 });
 
-app.listen(argv.port || 3000);
+var webport = argv.port || 3000;
+app.listen(webport);
+console.log('Listening on port', webport);
