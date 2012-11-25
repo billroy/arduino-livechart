@@ -1,6 +1,6 @@
 <!doctype html>
 <meta charset='utf-8'>
-<title>Arduino Serial LiveChart</title>
+<title>Arduino Live Chart</title>
 <style>
 body {
 	font: 10px sans-serif;
@@ -53,11 +53,16 @@ var line = d3.svg.line()
 		.x(function(d) { return x(d.time); })
 		.y(function(d) { return y(d.value); });
 
-var svg = d3.select('body').append('svg')
+var svg;
+
+function setsvg() {
+ 	svg = d3.select('body').append('svg')
 		.attr('width', width + margin.left + margin.right)
 		.attr('height', height + margin.top + margin.bottom)
 	.append('g')
 		.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+}
+setsvg();
 
 var json_uri = 'json/datalog';
 
@@ -119,15 +124,33 @@ function drawGraph(error, data) {
 
 d3.json(json_uri, drawGraph);
 
-var refresh = 0;
-if (refresh) window.setInterval(function() {
+var refresh = 4000;
+if (0) window.setInterval(function() {
+	svg.remove();
+	setsvg();
 	d3.json(json_uri, drawGraph);
+}, refresh);
+
+
+if (0) window.setInterval(function() {
+	d3.json(json_uri, function(error, data) {
+		var value = svg.selectAll('.value')
+			.data(data)
+		.enter().append('g')
+			.attr('class', 'value');
+
+	value.append('path')
+			.attr('class', 'line')
+			.attr('d', function(d) { return line(d.values); })
+			.style('stroke', function(d) { return color(d.name); });
+
+	});
 }, refresh);
 
 </script>
 
 <p>This example program charts data logged to the PC by a USB-connected Arduino sending streaming JSON.</p>
 
-<p>For documentation see the <a href='https://github.com/billroy/arduino-serial-livechart'>README on GitHub, where you can also find the code.</a></p>
+<p>For documentation see the <a href='https://github.com/billroy/arduino-livechart'>README on GitHub, where you can also find the code.</a></p>
 
 </body><html>
